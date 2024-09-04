@@ -1,0 +1,26 @@
+LOAD DATA INFILE 'C:/Users/Sarah/Downloads/pedidos.txt'
+INTO TABLE tempdata
+FIELDS TERMINATED BY ';' ENCLOSED BY '"' LINES TERMINATED BY '\n'
+(codigoPedido, dataPedido, SKU, UPC, nomeProduto, qtd, valor, frete, email, codigoComprador, nomeComprador, endereco, CEP, UF, pais);
+
+
+Tabela Cliente
+
+INSERT INTO `5sdb`.`cliente` (`codigoComprador`, `nomeComprador`, `email`, `endereco`, `CEP`, `UF`, `pais`)
+SELECT DISTINCT `codigoComprador`, `nomeComprador`, `email`, `endereco`, `CEP`, `UF`, `pais`
+FROM `5sdb`.`tempdata`;
+
+
+Tabela Pedido
+
+INSERT INTO `5sdb`.`pedido` (`codigoComprador`, `codigoPedido`, `dataPedido`, `valorPedido`, `fretePedido`)
+SELECT `codigoComprador`, `codigoPedido`, `dataPedido`, SUM(`valor`) AS valorPedido, SUM(`frete`)
+FROM `5sdb`.`tempdata`
+GROUP BY `codigoPedido`;
+
+
+Tabela Item do pedido
+
+INSERT INTO `5sdb`.`itemPedido` (`codigoPedido`, `SKU`, `UPC`, `nomeProduto`, `qtd`, `valor`, `codigoComprador`)
+SELECT `codigoPedido`, `SKU`, `UPC`, `nomeProduto`, `qtd`, `valor`, `codigoComprador`
+FROM `5sdb`.`tempdata`;
