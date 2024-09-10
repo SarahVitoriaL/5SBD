@@ -8,3 +8,8 @@ GROUP BY `codigoPedido`;
 Tabela Estoque
 
 Tabela Entrega
+
+INSERT INTO `5sdb`.`entrega` (`codigoPedido`, `valor`)
+SELECT `codigoPedido`, `qtd` * `valorPedido` AS valor
+FROM `5sdb`.`pedido`
+ORDER BY `valor`DESC;
