@@ -8,7 +8,8 @@ Tabela Cliente
 
 INSERT INTO `5sdb`.`cliente` (`codigoComprador`, `nomeComprador`, `email`, `endereco`, `CEP`, `UF`, `pais`)
 SELECT DISTINCT `codigoComprador`, `nomeComprador`, `email`, `endereco`, `CEP`, `UF`, `pais`
-FROM `5sdb`.`tempdata`;
+FROM `5sdb`.`tempdata`
+GROUP BY `codigoComprador`;
 
 
 Tabela Pedido
