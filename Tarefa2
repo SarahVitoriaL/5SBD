@@ -11,11 +11,13 @@ SELECT DISTINCT `codigoComprador`, `nomeComprador`, `email`, `endereco`, `CEP`, 
 FROM `5sdb`.`tempdata`
 GROUP BY `codigoComprador`;
 
+INSERT INTO `5sdb`.`pedido` (`codigoComprador`, `codigoPedido`, `dataPedido`, `ValorPorItem`, `fretePedido`) SELECT `codigoComprador`, `codigoPedido`, `dataPedido`, `valor` * `qtd` AS ValorPorItem, SUM(`frete`) FROM `5sdb`.`tempdata` GROUP BY `codigoPedido`;
+
 
 Tabela Pedido
 
 INSERT INTO `5sdb`.`pedido` (`codigoComprador`, `codigoPedido`, `dataPedido`, `valorPedido`, `fretePedido`)
-SELECT `codigoComprador`, `codigoPedido`, `dataPedido`, SUM(`valor`) AS valorPedido, SUM(`frete`)
+SELECT `codigoComprador`, `codigoPedido`, `dataPedido`, SUM(valor * qtd) AS valorPedido, SUM(`frete`)
 FROM `5sdb`.`tempdata`
 GROUP BY `codigoPedido`;
 
