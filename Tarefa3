@@ -1,1 +1,10 @@
+Tabela Compra
 
+INSERT INTO `5sdb`.`compra` (`codigoComprador`, `codigoPedido`, `dataPedido`, `valorCompra`, `fretePedido`)
+SELECT `codigoComprador`, `codigoPedido`, `dataPedido`, SUM(`valor`) AS valorCompra, SUM(`frete`)
+FROM `5sdb`.`tempdata`
+GROUP BY `codigoPedido`;
+
+Tabela Estoque
+
+Tabela Entrega
