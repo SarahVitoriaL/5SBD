@@ -37,20 +37,17 @@ SELECT DISTINCT SKU, UPC, nomeProduto, valor
 FROM 5sdb . tempdata
 GROUP BY SKU;
 
------------------------------------------------------------------------- Tabela estoque -----------------------------------------------------------------------------------------
+------------------------------------------------------------------------ Tabela estoque --------------------------------------------------------------------------------------------
 
-Tabela Estoque
+CREATE TABLE estoque ();
 
 ------------------------------------------------------------------------ Tabela itemPedido -----------------------------------------------------------------------------------------
 
-Tabela Entrega
-
-INSERT INTO `5sdb`.`entrega` (`codigoPedido`, `valor`)
-SELECT `codigoPedido`, valorPedido + fretePedido AS valor
-FROM `5sdb`.`pedido`
-ORDER BY `valor`DESC;
+CREATE TABLE itemPedido ();
 
 ------------------------------------------------------------------------ Tabela pedido -----------------------------------------------------------------------------------------
+
+CREATE TABLE pedido ();
 
 ------------------------------------------------------------------------ Tabela compra -----------------------------------------------------------------------------------------
 
@@ -60,5 +57,11 @@ INSERT INTO `5sdb`.`compra` (`codigoComprador`, `codigoPedido`, `dataPedido`, `v
 SELECT `codigoComprador`, `codigoPedido`, `dataPedido`, SUM(`valor`) AS valorCompra, SUM(`frete`)
 FROM `5sdb`.`tempdata`
 GROUP BY `codigoPedido`;
+
 ------------------------------------------------------------------------ Tabela entrega -----------------------------------------------------------------------------------------
 
+CREATE TABLE entrega ();
+
+INSERT INTO 5sdb . entrega (codigoPedido, endereco, CEP, UF, pais)
+SELECT DISTINCT codigoPedido, endereco, CEP, UF, pais
+FROM 5sdb . tempdata;
