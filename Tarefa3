@@ -1,3 +1,25 @@
+LOAD DATA INFILE 'C:/Users/sarah/Downloads/dados.csv'
+INTO TABLE tempdata
+FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n';
+
+Tabela cliente
+
+CREATE TABLE cliente (
+    codigoComprador VARCHAR(50) PRIMARY KEY,
+    email VARCHAR(255) NOT NULL,
+    nomeComprador VARCHAR(255) NOT NULL,  
+    endereco VARCHAR(255) NOT NULL,     
+    CEP VARCHAR(10) NOT NULL,           
+    UF CHAR(2) NOT NULL,               
+    pais VARCHAR(100) NOT NULL         
+);
+
+-- Adicionar um índice único no email para evitar duplicatas
+CREATE UNIQUE INDEX idx_email ON cliente(email);
+
+
+
+
 Tabela Compra
 
 INSERT INTO `5sdb`.`compra` (`codigoComprador`, `codigoPedido`, `dataPedido`, `valorCompra`, `fretePedido`)
