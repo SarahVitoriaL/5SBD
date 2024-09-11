@@ -39,7 +39,11 @@ GROUP BY SKU;
 
 ------------------------------------------------------------------------ Tabela estoque --------------------------------------------------------------------------------------------
 
-CREATE TABLE estoque ();
+CREATE TABLE estoque (
+    SKU VARCHAR(50) PRIMARY KEY,
+    UPC VARCHAR(50) NOT NULL,
+    qtd INT NOT NULL,
+);
 
 ------------------------------------------------------------------------ Tabela itemPedido -----------------------------------------------------------------------------------------
 
@@ -73,7 +77,11 @@ GROUP BY codigoPedido;
 
 ------------------------------------------------------------------------ Tabela compra -----------------------------------------------------------------------------------------
 
-CREATE TABLE compra ();
+CREATE TABLE compra (
+    codigoPedido VARCHAR(50) PRIMARY KEY,
+    valorCompra DECIMAL (10,2) NOT NULL,
+    fretePedido DECIMAL (10,2) NOT NULL
+);
 
 INSERT INTO 5sdb . compra (codigoPedido, valorCompra, fretePedido)
 SELECT codigoPedido, SUM (qtd * valor) AS valorCompra, SUM(`frete`) AS fretePedido
@@ -82,7 +90,13 @@ GROUP BY `codigoPedido`;
 
 ------------------------------------------------------------------------ Tabela entrega -----------------------------------------------------------------------------------------
 
-CREATE TABLE entrega ();
+CREATE TABLE entrega (
+    codigoPedido VARCHAR(50) PRIMARY KEY,
+    endereco VARCHAR(255) NOT NULL,     
+    CEP VARCHAR(10) NOT NULL,           
+    UF CHAR(2) NOT NULL,               
+    pais VARCHAR(100) NOT NULL 
+);
 
 INSERT INTO 5sdb . entrega (codigoPedido, endereco, CEP, UF, pais)
 SELECT DISTINCT codigoPedido, endereco, CEP, UF, pais
