@@ -43,7 +43,14 @@ CREATE TABLE estoque ();
 
 ------------------------------------------------------------------------ Tabela itemPedido -----------------------------------------------------------------------------------------
 
-CREATE TABLE itemPedido ();
+CREATE TABLE itemPedido (
+    codigoPedido INT NOT NULL,
+    SKU VARCHAR(50) NOT NULL,
+    UPC VARCHAR(50) NOT NULL,
+    qtd INT NOT NULL,
+    valor DECIMAL(10, 2) NOT NULL,
+    FOREIGN KEY (codigoPedido) REFERENCES pedido(codigoPedido)
+);
 
 INSERT INTO 5sdb . itemPedido (codigoPedido, SKU, UPC, qtd, valor)
 SELECT codigoPedido, SKU, UPC, qtd, valor
@@ -51,7 +58,13 @@ FROM 5sdb . tempdata;
 
 ------------------------------------------------------------------------ Tabela pedido -----------------------------------------------------------------------------------------
 
-CREATE TABLE pedido ();
+CREATE TABLE pedido (
+    codigoPedido INT PRIMARY KEY, 
+    codigoComprador INT NOT NULL, 
+    dataPedido DATE NOT NULL, 
+    valorPedido DECIMAL(10,2) NOT NULL
+    FOREIGN KEY (codigoComprador) REFERENCES cliente (codigoComprador)
+);
 
 INSERT INTO 5sdb . pedido (codigoPedido, codigoComprador, dataPedido, valorPedido)
 SELECT codigoPedido, codigoComprador, dataPedido, SUM (qtd * valor) AS valorPedido
