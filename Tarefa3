@@ -16,10 +16,10 @@ CREATE TABLE cliente (
 
 CREATE UNIQUE INDEX idx_email ON cliente(email);
 
-INSERT INTO `5sdb`.`cliente` (`codigoComprador`, `nomeComprador`, `email`, `endereco`, `CEP`, `UF`, `pais`)
-SELECT DISTINCT `codigoComprador`, `nomeComprador`, `email`, `endereco`, `CEP`, `UF`, `pais`
-FROM `5sdb`.`tempdata`
-GROUP BY `codigoComprador`;
+INSERT INTO 5sdb . cliente (codigoComprador, nomeComprador, email, endereco, CEP, UF, pais)
+SELECT DISTINCT codigoComprador, nomeComprador, email, endereco, CEP, UF, pais
+FROM 5sdb . tempdata
+GROUP BY codigoComprador;
 
 ------------------------------------------------------------------------ Tabela produto -----------------------------------------------------------------------------------------
 
@@ -45,16 +45,25 @@ CREATE TABLE estoque ();
 
 CREATE TABLE itemPedido ();
 
+INSERT INTO 5sdb . itemPedido (codigoPedido, SKU, UPC, qtd, valor)
+SELECT codigoPedido, SKU, UPC, qtd, valor
+FROM 5sdb . tempdata;
+
 ------------------------------------------------------------------------ Tabela pedido -----------------------------------------------------------------------------------------
 
 CREATE TABLE pedido ();
+
+INSERT INTO 5sdb . pedido (codigoPedido, codigoComprador, dataPedido, valorPedido)
+SELECT codigoPedido, codigoComprador, dataPedido, SUM (qtd * valor) AS valorPedido
+FROM 5sdb . tempdata
+GROUP BY codigoPedido;
 
 ------------------------------------------------------------------------ Tabela compra -----------------------------------------------------------------------------------------
 
 CREATE TABLE compra ();
 
-INSERT INTO `5sdb`.`compra` (`codigoComprador`, `codigoPedido`, `dataPedido`, `valorCompra`, `fretePedido`)
-SELECT `codigoComprador`, `codigoPedido`, `dataPedido`, SUM(`valor`) AS valorCompra, SUM(`frete`)
+INSERT INTO 5sdb . compra (codigoPedido, valorCompra, fretePedido)
+SELECT codigoPedido, SUM (qtd * valor) AS valorCompra, SUM(`frete`) AS fretePedido
 FROM `5sdb`.`tempdata`
 GROUP BY `codigoPedido`;
 
