@@ -14,7 +14,6 @@ CREATE TABLE cliente (
     pais VARCHAR(100) NOT NULL         
 );
 
--- Adicionar um índice único no email para evitar duplicatas
 CREATE UNIQUE INDEX idx_email ON cliente(email);
 
 INSERT INTO `5sdb`.`cliente` (`codigoComprador`, `nomeComprador`, `email`, `endereco`, `CEP`, `UF`, `pais`)
@@ -22,18 +21,27 @@ SELECT DISTINCT `codigoComprador`, `nomeComprador`, `email`, `endereco`, `CEP`, 
 FROM `5sdb`.`tempdata`
 GROUP BY `codigoComprador`;
 
------------------------------------------------------------------------- Tabela cliente -----------------------------------------------------------------------------------------
+------------------------------------------------------------------------ Tabela produto -----------------------------------------------------------------------------------------
 
-Tabela Compra
+CREATE TABLE produto (
+    SKU VARCHAR (50) PRIMARY KEY,
+    UPC VARCHAR (50) NOT NULL,
+    nomeProduto VARCHAR (255) NOT NULL,
+    valor DECIMAL (10,2) NOT NULL
+);
 
-INSERT INTO `5sdb`.`compra` (`codigoComprador`, `codigoPedido`, `dataPedido`, `valorCompra`, `fretePedido`)
-SELECT `codigoComprador`, `codigoPedido`, `dataPedido`, SUM(`valor`) AS valorCompra, SUM(`frete`)
-FROM `5sdb`.`tempdata`
-GROUP BY `codigoPedido`;
+CREATE UNIQUE INDEX idx_upc ON produto(UPC);
 
------------------------------------------------------------------------- Tabela cliente -----------------------------------------------------------------------------------------
+INSERT INTO 5sdb . produto (SKU, UPC, nomeProduto, valor)
+SELECT DISTINCT SKU, UPC, nomeProduto, valor
+FROM 5sdb . tempdata
+GROUP BY SKU;
+
+------------------------------------------------------------------------ Tabela estoque -----------------------------------------------------------------------------------------
 
 Tabela Estoque
+
+------------------------------------------------------------------------ Tabela itemPedido -----------------------------------------------------------------------------------------
 
 Tabela Entrega
 
@@ -41,3 +49,16 @@ INSERT INTO `5sdb`.`entrega` (`codigoPedido`, `valor`)
 SELECT `codigoPedido`, valorPedido + fretePedido AS valor
 FROM `5sdb`.`pedido`
 ORDER BY `valor`DESC;
+
+------------------------------------------------------------------------ Tabela pedido -----------------------------------------------------------------------------------------
+
+------------------------------------------------------------------------ Tabela compra -----------------------------------------------------------------------------------------
+
+CREATE TABLE compra ();
+
+INSERT INTO `5sdb`.`compra` (`codigoComprador`, `codigoPedido`, `dataPedido`, `valorCompra`, `fretePedido`)
+SELECT `codigoComprador`, `codigoPedido`, `dataPedido`, SUM(`valor`) AS valorCompra, SUM(`frete`)
+FROM `5sdb`.`tempdata`
+GROUP BY `codigoPedido`;
+------------------------------------------------------------------------ Tabela entrega -----------------------------------------------------------------------------------------
+
