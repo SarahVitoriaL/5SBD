@@ -1,7 +1,21 @@
 --------------------------------------------------------------------------------------------- Tabela tempdata ---------------------------------------------------------------------------------------------------------
 
 CREATE TABLE tempdata (
-  
+  codigoPedido, 
+  dataPedido, 
+  SKU, 
+  UPC, 
+  nomeProduto, 
+  qtd, 
+  valor, 
+  frete, 
+  email, 
+  codigoComprador, 
+  nomeComprador, 
+  endereco, 
+  CEP, 
+  UF, 
+  pais
 );
 
 LOAD DATA INFILE 'C:/Users/sarah/Downloads/produtos.csv'
@@ -41,27 +55,28 @@ SELECT DISTINCT SKU, UPC, nomeProduto, valor
 FROM 5sdb . tempdata
 GROUP BY SKU;
 
---------------------------------------------------------------------------------------------- Tabela itensPedido ---------------------------------------------------------------------------------------------------------
-
-CREATE TABLE itensPedido (
-      id INT AUTO_INCREMENT PRIMARY KEY,
-
-  idPedido INT NOT NULL,
-  
-);
-
 --------------------------------------------------------------------------------------------- Tabela pedidos ---------------------------------------------------------------------------------------------------------
 
 CREATE TABLE pedidos (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  
-  
+  codigoPedido INT PRIMARY KEY, 
+  codigoComprador INT NOT NULL, 
+  dataPedido DATE NOT NULL, 
+  valorPedido DECIMAL(10,2) NOT NULL  
 );
 
+--------------------------------------------------------------------------------------------- Tabela itensPedido ---------------------------------------------------------------------------------------------------------
+
+CREATE TABLE itensPedido (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  idPedido INT NOT NULL,
+  
+);
 --------------------------------------------------------------------------------------------- Tabela entregas ---------------------------------------------------------------------------------------------------------
 
 CREATE TABLE entregas (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  
 );
 
 --------------------------------------------------------------------------------------------- Tabela compras ---------------------------------------------------------------------------------------------------------
@@ -75,6 +90,12 @@ CREATE TABLE compras (
   loja
 );
 
+--------------------------------------------------------------------------------------------- Tabela estoque ---------------------------------------------------------------------------------------------------------
+
+CREATE TABLE estoque (
+  idProduto INT NOT NULL,
+  qtd INT NOT NULL
+);
+
 --------------------------------------------------------------------------------------------- Cursor ---------------------------------------------------------------------------------------------------------
 
--- 
