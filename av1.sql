@@ -11,8 +11,20 @@ FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n';
 -------------------------------------------------------------------------------------------- Tabela clientes --------------------------------------------------------------------------------------------
 
 CREATE TABLE clientes (
-      id INT AUTO_INCREMENT PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    codigoComprador VARCHAR(50) PRIMARY KEY,
+    email VARCHAR(255) NOT NULL,
+    nomeComprador VARCHAR(255) NOT NULL,  
+    endereco VARCHAR(255) NOT NULL,     
+    CEP VARCHAR(10) NOT NULL,           
+    UF CHAR(2) NOT NULL,               
+    pais VARCHAR(100) NOT NULL 
 );
+
+INSERT INTO 5sdb . clientes (codigoComprador, nomeComprador, email, endereco, CEP, UF, pais)
+SELECT DISTINCT codigoComprador, nomeComprador, email, endereco, CEP, UF, pais
+FROM 5sdb . tempdata
+GROUP BY codigoComprador;
 
 --------------------------------------------------------------------------------------------- Tabela produtos ---------------------------------------------------------------------------------------------------------
 
