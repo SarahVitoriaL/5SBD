@@ -98,4 +98,46 @@ CREATE TABLE estoque (
 );
 
 --------------------------------------------------------------------------------------------- Cursor ---------------------------------------------------------------------------------------------------------
+ 
+DECLARE @id INT, @total DECIMAL(9,2), @status INT, @upc VARCHAR(50), @nome VARCHAR(50), @qtd INT;
+DECLARE @estoqueQtd INT;
 
+DECLARE pedidosCursor CURSOR FOR
+SELECT p.id, p.total, p.status, ip.sku, ip.nome, ip.qtd  
+FROM [pedidos] p
+INNER JOIN itensPedido ip ON ip.idPedido = p.id
+ORDER BY p.total DESC;
+
+OPEN pedidosCursor;
+FETCH NEXT FROM pedidosCursor INTO @id, @total, @status, @sku, @nome, @qtd;
+
+WHILE @@FETCH_STATUS = 0
+BEGIN
+    -- Verificar a quantidade disponível no estoque
+    SELECT @estoqueQuantidade = e.qtd
+    FROM estoque e
+    WHERE e.sku = @sku;
+
+    IF @estoqueQuantidade >= @qtd
+    BEGIN
+        -- Se houver estoque suficiente, diminui a quantidade
+        UPDATE estoque
+        SET qtd = qtd - @qtd
+        WHERE sku = @sku;
+
+        PRINT('Estoque atualizado para SKU: ' + @sku);
+    END
+    ELSE
+    BEGIN
+        -- Se não houver estoque suficiente, registrar na tabela de compras
+        INSERT INTO compras (sku, quantidadeNecessaria)
+        VALUES (@sku, @qtd - @estoqueQuantidade);
+
+        PRINT('Estoque insuficiente para SKU: ' + @sku + '. Necessário comprar: ' + CONVERT(VARCHAR, @qtd - @estoqueQuantidade));
+    END
+
+    FETCH NEXT FROM pedidosCursor INTO @id, @total, @status, @sku, @nome, @qtd;
+END
+
+CLOSE pedidosCursor;
+DEALLOCATE pedidosCursor;
