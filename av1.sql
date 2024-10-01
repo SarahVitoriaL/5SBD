@@ -6,16 +6,16 @@ CREATE TABLE tempdata (
   SKU, 
   UPC, 
   nomeProduto, 
-  qtd, 
-  valor, 
-  frete, 
-  email, 
-  codigoComprador, 
-  nomeComprador, 
-  endereco, 
-  CEP, 
-  UF, 
-  pais
+  qtd INT NOT NULL, 
+  valor DECIMAL (9,2) NOT NULL, 
+  frete DECIMAL (9,2) NOT NULL, 
+  email VARCHAR(255) NOT NULL, 
+  codigoComprador VARCHAR(50) PRIMARY KEY, 
+  nomeComprador VARCHAR(255) NOT NULL, 
+  endereco VARCHAR(255) NOT NULL, 
+  CEP VARCHAR(10) NOT NULL, 
+  UF CHAR(2) NOT NULL, 
+  pais VARCHAR(100) NOT NULL
 );
 
 LOAD DATA INFILE 'C:/Users/sarah/Downloads/produtos.csv'
@@ -47,7 +47,7 @@ CREATE TABLE produtos (
   SKU VARCHAR (50) PRIMARY KEY,
   UPC VARCHAR (50) NOT NULL,
   nomeProduto VARCHAR (255) NOT NULL,
-  valor DECIMAL (10,2) NOT NULL
+  valor DECIMAL (9,2) NOT NULL
 );
 
 INSERT INTO 5sdb . produtos (SKU, UPC, nomeProduto, valor)
@@ -62,7 +62,7 @@ CREATE TABLE pedidos (
   codigoPedido INT PRIMARY KEY, 
   codigoComprador INT NOT NULL, 
   dataPedido DATE NOT NULL, 
-  valorPedido DECIMAL(10,2) NOT NULL  
+  valorPedido DECIMAL(9,2) NOT NULL  
 );
 
 --------------------------------------------------------------------------------------------- Tabela itensPedido ---------------------------------------------------------------------------------------------------------
