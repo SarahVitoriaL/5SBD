@@ -66,6 +66,9 @@ CREATE TABLE pedidos (
 );
 
 INSERT INTO 5sdb . pedidos (codigoPedido, codigoComprador, dataPedido, valorPedido)
+SELECT codigoPedido, codigoComprador, dataPedido, SUM (qtd * valor) AS valorPedido
+FROM 5sdb . tempdata
+GROUP BY codigoPedido;
 
 --------------------------------------------------------------------------------------------- Tabela itensPedido ---------------------------------------------------------------------------------------------------------
 
