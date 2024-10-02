@@ -90,8 +90,13 @@ FROM 5sdb . tempdata;
 
 CREATE TABLE entregas (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  
+  idPedido INT NOT NULL,
+  valor DECIMAL(9,2) NOT NULL
 );
+
+INSERT INTO 5db . entregas (idPedido, valor)
+SELECT idPedido, valor 
+FROM 5db . pedidos;
 
 --------------------------------------------------------------------------------------------- Tabela compras ---------------------------------------------------------------------------------------------------------
 
