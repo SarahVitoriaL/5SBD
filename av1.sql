@@ -59,8 +59,8 @@ GROUP BY SKU;
 
 CREATE TABLE pedidos (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  codigoPedido INT PRIMARY KEY, 
-  codigoComprador INT NOT NULL, 
+  codigoPedido VARCHAR(50) PRIMARY KEY, 
+  codigoComprador VARCHAR(50) NOT NULL, 
   dataPedido DATE NOT NULL, 
   valorPedido DECIMAL(9,2) NOT NULL  
 );
