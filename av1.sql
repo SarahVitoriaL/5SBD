@@ -26,7 +26,7 @@ FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n';
 
 CREATE TABLE clientes (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    codigoComprador VARCHAR(50) PRIMARY KEY,
+    codigoComprador VARCHAR(50) NOT NULL,
     email VARCHAR(255) NOT NULL,
     nomeComprador VARCHAR(255) NOT NULL,  
     endereco VARCHAR(255) NOT NULL,     
@@ -44,7 +44,7 @@ GROUP BY codigoComprador;
 
 CREATE TABLE produtos (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  SKU VARCHAR (50) PRIMARY KEY,
+  SKU VARCHAR (50) NOT NULL,
   UPC VARCHAR (50) NOT NULL,
   nomeProduto VARCHAR (255) NOT NULL,
   valor DECIMAL (9,2) NOT NULL
@@ -59,7 +59,7 @@ GROUP BY SKU;
 
 CREATE TABLE pedidos (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  codigoPedido VARCHAR(50) PRIMARY KEY, 
+  codigoPedido VARCHAR(50) NOT NULL, 
   codigoComprador VARCHAR(50) NOT NULL, 
   dataPedido DATE NOT NULL, 
   valorPedido DECIMAL(9,2) NOT NULL  
@@ -94,9 +94,9 @@ CREATE TABLE entregas (
   valor DECIMAL(9,2) NOT NULL
 );
 
-INSERT INTO 5db . entregas (idPedido, valor)
-SELECT idPedido, valor 
-FROM 5db . pedidos;
+INSERT INTO 5sdb . entregas (idPedido, valor)
+SELECT id, valorPedido 
+FROM 5sdb . pedidos;
 
 --------------------------------------------------------------------------------------------- Tabela compras ---------------------------------------------------------------------------------------------------------
 
