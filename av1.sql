@@ -62,11 +62,12 @@ CREATE TABLE pedidos (
   codigoPedido VARCHAR(50) NOT NULL, 
   codigoComprador VARCHAR(50) NOT NULL, 
   dataPedido DATE NOT NULL, 
-  valorPedido DECIMAL(9,2) NOT NULL  
+  valorPedido DECIMAL(9,2) NOT NULL,
+  status VARCHAR(20) NOT NULL
 );
 
-INSERT INTO 5sdb . pedidos (codigoPedido, codigoComprador, dataPedido, valorPedido)
-SELECT codigoPedido, codigoComprador, dataPedido, SUM (qtd * valor) AS valorPedido
+INSERT INTO 5sdb . pedidos (codigoPedido, codigoComprador, dataPedido, valorPedido, status)
+SELECT codigoPedido, codigoComprador, dataPedido, SUM(qtd * valor) AS valorPedido, 'pendente'
 FROM 5sdb . tempdata
 GROUP BY codigoPedido;
 
