@@ -101,7 +101,7 @@ CREATE TABLE compras (
   SKU VARCHAR (50) PRIMARY KEY,
   UPC VARCHAR (50) NOT NULL,
   qtd INT NOT NULL,
-  loja
+  codigoLoja VARCHAR (50) NOT NULL
 );
 
 --------------------------------------------------------------------------------------------- Tabela estoque ---------------------------------------------------------------------------------------------------------
@@ -110,6 +110,10 @@ CREATE TABLE estoque (
   idProduto INT NOT NULL,
   qtd INT NOT NULL
 );
+
+LOAD DATA INFILE 'C:/Users/sarah/Downloads/estoque.csv'
+INTO TABLE estoque
+FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n';
 
 --------------------------------------------------------------------------------------------- Cursor ---------------------------------------------------------------------------------------------------------
  
