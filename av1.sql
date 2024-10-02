@@ -75,8 +75,17 @@ GROUP BY codigoPedido;
 CREATE TABLE itensPedido (
   id INT AUTO_INCREMENT PRIMARY KEY,
   idPedido INT NOT NULL,
-  
+  codigoPedido VARCHAR(50) NOT NULL,
+  SKU VARCHAR(50) NOT NULL,
+  UPC VARCHAR(50) NOT NULL,
+  qtd INT NOT NULL,
+  valor DECIMAL(9,2) NOT NULL
 );
+
+INSERT INTO 5sdb . itensPedido (codigoPedido, SKU, UPC, qtd, valor)
+SELECT codigoPedido, SKU, UPC, qtd, valor
+FROM 5sdb . tempdata;
+
 --------------------------------------------------------------------------------------------- Tabela entregas ---------------------------------------------------------------------------------------------------------
 
 CREATE TABLE entregas (
