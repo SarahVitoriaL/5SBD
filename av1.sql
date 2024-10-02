@@ -65,6 +65,8 @@ CREATE TABLE pedidos (
   valorPedido DECIMAL(9,2) NOT NULL  
 );
 
+INSERT INTO 5sdb . pedidos (codigoPedido, codigoComprador, dataPedido, valorPedido)
+
 --------------------------------------------------------------------------------------------- Tabela itensPedido ---------------------------------------------------------------------------------------------------------
 
 CREATE TABLE itensPedido (
