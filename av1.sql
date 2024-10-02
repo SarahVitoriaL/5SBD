@@ -1,16 +1,16 @@
 --------------------------------------------------------------------------------------------- Tabela tempdata ---------------------------------------------------------------------------------------------------------
 
 CREATE TABLE tempdata (
-  codigoPedido, 
-  dataPedido, 
-  SKU, 
-  UPC, 
-  nomeProduto, 
+  codigoPedido VARCHAR(50) NOT NULL, 
+  dataPedido DATE NOT NULL, 
+  SKU VARCHAR (50) NOT NULL, 
+  UPC VARCHAR (50) NOT NULL, 
+  nomeProduto VARCHAR (255) NOT NULL, 
   qtd INT NOT NULL, 
   valor DECIMAL (9,2) NOT NULL, 
   frete DECIMAL (9,2) NOT NULL, 
   email VARCHAR(255) NOT NULL, 
-  codigoComprador VARCHAR(50) PRIMARY KEY, 
+  codigoComprador VARCHAR(50) NOT NULL, 
   nomeComprador VARCHAR(255) NOT NULL, 
   endereco VARCHAR(255) NOT NULL, 
   CEP VARCHAR(10) NOT NULL, 
