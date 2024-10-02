@@ -76,14 +76,14 @@ GROUP BY codigoPedido;
 CREATE TABLE itensPedido (
   id INT AUTO_INCREMENT PRIMARY KEY,
   idPedido INT NOT NULL,
-  codigoPedido VARCHAR(50) NOT NULL,
+  codPedido VARCHAR(50) NOT NULL,
   SKU VARCHAR(50) NOT NULL,
   UPC VARCHAR(50) NOT NULL,
   qtd INT NOT NULL,
   valor DECIMAL(9,2) NOT NULL
 );
 
-INSERT INTO 5sdb . itensPedido (codigoPedido, SKU, UPC, qtd, valor)
+INSERT INTO 5sdb . itensPedido (codPedido, SKU, UPC, qtd, valor)
 SELECT codigoPedido, SKU, UPC, qtd, valor
 FROM 5sdb . tempdata;
 
@@ -103,17 +103,15 @@ FROM 5sdb . pedidos;
 
 CREATE TABLE compras (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  idProduto INT NOT NULL,
-  SKU VARCHAR (50) PRIMARY KEY,
-  UPC VARCHAR (50) NOT NULL,
+  SKU VARCHAR (50) NOT NULL,
   qtd INT NOT NULL,
-  codigoLoja VARCHAR (50) NOT NULL
 );
 
 --------------------------------------------------------------------------------------------- Tabela estoque ---------------------------------------------------------------------------------------------------------
 
 CREATE TABLE estoque (
   idProduto INT NOT NULL,
+  codigoProduto VARCHAR(20) NOT NULL,
   qtd INT NOT NULL
 );
 
@@ -137,7 +135,7 @@ BEGIN
     DECLARE pedidosCursor CURSOR FOR
     SELECT p.codigoPedido, p.valorPedido, p.status, ip.SKU, ip.qtd  
     FROM pedidos p
-    INNER JOIN itenspedido ip ON ip.codPedido = p.codigoPedido  
+    INNER JOIN itensPedido ip ON ip.codPedido = p.codigoPedido  
     WHERE p.status = 'pendente'
     ORDER BY p.valorPedido DESC;
 
