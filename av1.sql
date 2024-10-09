@@ -18,7 +18,7 @@ CREATE TABLE tempdata (
   pais VARCHAR(100) NOT NULL
 );
 
-LOAD DATA INFILE 'C:/Users/sarah/Downloads/produtos.csv'
+LOAD DATA INFILE 'C:/Users/sarah/Downloads/dados.csv'
 INTO TABLE tempdata
 FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n'
 IGNORE 1 LINES;
