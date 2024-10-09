@@ -122,59 +122,58 @@ DELIMITER //
 CREATE PROCEDURE cursor_pedidos ()
 
 BEGIN
-    DECLARE codigoPedido VARCHAR(20);
-    DECLARE valorPedido DECIMAL(9,2);  
-    DECLARE status VARCHAR(20); 
-    DECLARE SKU VARCHAR(50);
-    DECLARE qtd INT;
-    DECLARE estoqueQtd INT;
-    DECLARE done INT DEFAULT 0;
+    DECLARE acodigoPedido VARCHAR(20);
+    DECLARE avalorPedido DECIMAL(9,2);  
+    DECLARE aSKU VARCHAR(50);
+    DECLARE aqtd INT;
+    DECLARE pronto INT DEFAULT 0;
 
     DECLARE pedidosCursor CURSOR FOR
-    SELECT p.codigoPedido, p.valorPedido, p.status, ip.SKU, ip.qtd  
+    SELECT p.codigoPedido, p.valorPedido, ip.SKU, ip.qtd  
     FROM pedidos p
-    INNER JOIN itensPedido ip ON ip.codPedido = p.codigoPedido  
+    INNER JOIN itenspedido ip ON ip.codPedido = p.codigoPedido
     WHERE p.status = 'pendente'
     ORDER BY p.valorPedido DESC;
 
-    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET pronto = 1;
 
     OPEN pedidosCursor;
 
     read_loop: LOOP
-        FETCH pedidosCursor INTO codigoPedido, valorPedido, status, SKU, qtd;
+        FETCH pedidosCursor INTO acodigoPedido, avalorPedido, aSKU, aqtd;
 
-        IF done THEN
+        IF pronto THEN
             LEAVE read_loop;
         END IF;
 
-        -- Verificar a quantidade disponível no estoque
-        SELECT e.qtd INTO estoqueQtd
-        FROM estoque e
-        WHERE e.SKU = sku;
+        IF (SELECT qtd FROM estoque WHERE SKU = aSKU LIMIT 1) >= aqtd THEN
 
-        IF estoqueQtd >= qtd THEN
-            -- Se houver estoque suficiente
+            -- Se houver estoque suficiente, diminui a quantidade
             UPDATE estoque
-            SET qtd = estoqueQtd - qtd
-            WHERE SKU = sku;  
+            SET qtd = qtd - aqtd
+            WHERE SKU = aSKU; 
 
             -- Atualiza o status do pedido para 'ok'
             UPDATE pedidos
             SET status = 'ok'
-            WHERE codigoPedido = codigoPedido;
+            WHERE codigoPedido = acodigoPedido;  
 
             -- Insere na tabela de entregas
             INSERT INTO entregas (codigoPedido, valor)
-            VALUES (codigoPedido, valorPedido);
+            VALUES (acodigoPedido, avalorPedido);
 
-            SELECT CONCAT('Estoque atualizado para SKU: ', SKU, ', pedido alterado para status: ok e registrado na tabela de entregas.') AS mensagem;
+            SELECT CONCAT('Estoque atualizado para SKU: ', aSKU, ', pedido alterado para status: ok e registrado na tabela de entregas.') AS mensagem;
+
         ELSE
             -- Se não houver estoque suficiente, registrar na tabela de compras
             INSERT INTO compras (SKU, quant)
-            VALUES (SKU, GREATEST(qtd - estoqueQtd, 0));  -- Garantir que não será negativo
+            VALUES (aSKU, aqtd);  
+            
+            UPDATE pedidos
+            SET status = 'pendente'
+            WHERE codigoPedido = acodigoPedido;  
 
-            SELECT CONCAT('Estoque insuficiente para SKU: ', SKU, '. Necessário comprar: ', qtd - estoqueQtd) AS mensagem;
+            SELECT CONCAT('Estoque insuficiente para SKU: ', aSKU, '. Necessário comprar: ', aqtd) AS mensagem;
         END IF;
 
     END LOOP;
