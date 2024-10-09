@@ -103,7 +103,7 @@ CREATE TABLE estoque (
 );
 
 INSERT INTO 5sdb . estoque (SKU, qtd)
-SELECT SKU, 10
+SELECT SKU, 5
 FROM 5sdb . produtos;
 
 DELIMITER //
