@@ -119,7 +119,7 @@ BEGIN
     DECLARE pedidosCursor CURSOR FOR
     SELECT p.codigoPedido, p.valorPedido, ip.SKU, ip.qtd  
     FROM pedidos p
-    INNER JOIN itenspedido ip ON ip.codPedido = p.codigoPedido
+    INNER JOIN itenspedido ip ON ip.codigoPedido = p.codigoPedido
     WHERE p.status = 'pendente'
     ORDER BY p.valorPedido DESC;
 
@@ -169,4 +169,4 @@ BEGIN
     CLOSE pedidosCursor;
 
 END //
-DELIMITER;
+DELIMITER ;
