@@ -61,13 +61,12 @@ CREATE TABLE pedidos (
   id INT AUTO_INCREMENT PRIMARY KEY,
   codigoPedido VARCHAR(50) NOT NULL, 
   codigoComprador VARCHAR(50) NOT NULL, 
-  dataPedido DATE NOT NULL, 
   valorPedido DECIMAL(9,2) NOT NULL,
   status VARCHAR(20) NOT NULL
 );
 
-INSERT INTO 5sdb . pedidos (codigoPedido, codigoComprador, dataPedido, valorPedido, status)
-SELECT codigoPedido, codigoComprador, dataPedido, SUM(qtd * valor) AS valorPedido, 'pendente'
+INSERT INTO 5sdb . pedidos (codigoPedido, codigoComprador, valorPedido, status)
+SELECT codigoPedido, codigoComprador, SUM(qtd * valor) AS valorPedido, 'pendente'
 FROM 5sdb . tempdata
 GROUP BY codigoPedido;
 
