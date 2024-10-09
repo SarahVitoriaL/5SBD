@@ -1,83 +1,64 @@
-DECLARE @idPedido INT, @quantidadeNecessaria INT, @quantidadeEstoque INT;
-DECLARE @todosEmEstoque BIT;
+DELIMITER //
+CREATE PROCEDURE cursor_pedidos ()
 
--- Cursor para iterar sobre os pedidos
-DECLARE pedidoCursor CURSOR
-FOR
-SELECT DISTINCT p.id
-FROM Pedidos p;
-
-OPEN pedidoCursor;
-FETCH NEXT FROM pedidoCursor INTO @idPedido;
-
-WHILE @@FETCH_STATUS = 0
 BEGIN
-    SET @todosEmEstoque = 1; -- Inicializa como verdadeiro
+    DECLARE acodigoPedido VARCHAR(20);
+    DECLARE avalorPedido DECIMAL(9,2);  
+    DECLARE aSKU VARCHAR(50);
+    DECLARE aqtd INT;
+    DECLARE pronto INT DEFAULT 0;
 
-    -- Cursor para iterar sobre os itens do pedido atual
-    DECLARE itemCursor CURSOR
-    FOR
-    SELECT pp.quantidade
-    FROM PedidosItens pp
-    WHERE pp.idPedido = @idPedido;
+    DECLARE pedidosCursor CURSOR FOR
+    SELECT p.codigoPedido, p.valorPedido, ip.SKU, ip.qtd  
+    FROM pedidos p
+    INNER JOIN itenspedido ip ON ip.codigoPedido = p.codigoPedido
+    WHERE p.status = 'pendente'
+    ORDER BY p.valorPedido DESC;
 
-    OPEN itemCursor;
-    FETCH NEXT FROM itemCursor INTO @quantidadeNecessaria;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET pronto = 1;
 
-    WHILE @@FETCH_STATUS = 0
-    BEGIN
-        -- Verificar a quantidade em estoque
-        SELECT @quantidadeEstoque = quantidade
-        FROM Estoque
-        WHERE idItem = pp.idItem; -- Assuma que há uma coluna idItem em PedidosItens
+    OPEN pedidosCursor;
 
-        -- Verificar se há quantidade suficiente em estoque
-        IF @quantidadeEstoque < @quantidadeNecessaria
-        BEGIN
-            SET @todosEmEstoque = 0; -- Marcar como falso se faltar algum item
-            BREAK; -- Sai do loop se não tiver estoque suficiente
-        END
+    read_loop: LOOP
+        FETCH pedidosCursor INTO acodigoPedido, avalorPedido, aSKU, aqtd;
 
-        FETCH NEXT FROM itemCursor INTO @quantidadeNecessaria;
-    END
+        IF pronto THEN
+            LEAVE read_loop;
+        END IF;
 
-    CLOSE itemCursor;
-    DEALLOCATE itemCursor;
+        IF (SELECT qtd FROM estoque WHERE SKU = aSKU LIMIT 1) >= aqtd THEN
 
-    -- Se todos os itens estiverem em estoque, debitar e atualizar
-    IF @todosEmEstoque = 1
-    BEGIN
-        -- Atualizar o estoque para cada item do pedido
-        DECLARE itemCursor2 CURSOR
-        FOR
-        SELECT pp.idItem, pp.quantidade
-        FROM PedidosItens pp
-        WHERE pp.idPedido = @idPedido;
+            -- Se houver estoque suficiente, diminui a quantidade
+            UPDATE estoque
+            SET qtd = qtd - aqtd
+            WHERE SKU = aSKU; 
 
-        OPEN itemCursor2;
-        FETCH NEXT FROM itemCursor2 INTO @idItem, @quantidadeNecessaria;
+            -- Atualiza o status do pedido para 'ok'
+            UPDATE pedidos
+            SET status = 'ok'
+            WHERE codigoPedido = acodigoPedido;  
 
-        WHILE @@FETCH_STATUS = 0
-        BEGIN
-            -- Debitar do estoque
-            UPDATE Estoque
-            SET quantidade = quantidade - @quantidadeNecessaria
-            WHERE idItem = @idItem;
+            -- Insere na tabela de entregas
+            INSERT INTO entregas (codigoPedido, valor)
+            VALUES (acodigoPedido, avalorPedido);
 
-            FETCH NEXT FROM itemCursor2 INTO @idItem, @quantidadeNecessaria;
-        END
+            SELECT CONCAT('Estoque atualizado para SKU: ', aSKU, ', pedido alterado para status: ok e registrado na tabela de entregas.') AS mensagem;
 
-        CLOSE itemCursor2;
-        DEALLOCATE itemCursor2;
+        ELSE
+            -- Se não houver estoque suficiente, registrar na tabela de compras
+            INSERT INTO compras (SKU, qtd)
+            VALUES (aSKU, aqtd);  
+            
+            UPDATE pedidos
+            SET status = 'pendente'
+            WHERE codigoPedido = acodigoPedido;  
 
-        -- Atualizar o status da entrega
-        UPDATE Entrega
-        SET status = 'ok'
-        WHERE idPedido = @idPedido;
-    END
+            SELECT CONCAT('Estoque insuficiente para SKU: ', aSKU, '. Necessário comprar: ', aqtd) AS mensagem;
+        END IF;
 
-    FETCH NEXT FROM pedidoCursor INTO @idPedido;
-END
+    END LOOP;
 
-CLOSE pedidoCursor;
-DEALLOCATE pedidoCursor;
+    CLOSE pedidosCursor;
+
+END //
+DELIMITER ;
