@@ -154,7 +154,7 @@ BEGIN
 
         ELSE
             -- Se não houver estoque suficiente, registrar na tabela de compras
-            INSERT INTO compras (SKU, quant)
+            INSERT INTO compras (SKU, qtd)
             VALUES (aSKU, aqtd);  
             
             UPDATE pedidos
