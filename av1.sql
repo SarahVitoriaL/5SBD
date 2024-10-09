@@ -1,4 +1,3 @@
---------------------------------------------------------------------------------------------- Tabela tempdata ---------------------------------------------------------------------------------------------------------
 
 CREATE TABLE tempdata (
   codigoPedido VARCHAR(50) NOT NULL, 
@@ -23,7 +22,6 @@ INTO TABLE tempdata
 FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n'
 IGNORE 1 LINES;
 
--------------------------------------------------------------------------------------------- Tabela clientes --------------------------------------------------------------------------------------------
 
 CREATE TABLE clientes (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -41,7 +39,6 @@ SELECT DISTINCT codigoComprador, nomeComprador, email, endereco, CEP, UF, pais
 FROM 5sdb . tempdata
 GROUP BY codigoComprador;
 
---------------------------------------------------------------------------------------------- Tabela produtos ---------------------------------------------------------------------------------------------------------
 
 CREATE TABLE produtos (
   id INT AUTO_INCREMENT PRIMARY KEY,
@@ -56,7 +53,6 @@ SELECT DISTINCT SKU, UPC, nomeProduto, valor
 FROM 5sdb . tempdata
 GROUP BY SKU;
 
---------------------------------------------------------------------------------------------- Tabela pedidos ---------------------------------------------------------------------------------------------------------
 
 CREATE TABLE pedidos (
   id INT AUTO_INCREMENT PRIMARY KEY,
@@ -71,7 +67,6 @@ SELECT codigoPedido, codigoComprador, SUM(qtd * valor) AS valorPedido, 'pendente
 FROM 5sdb . tempdata
 GROUP BY codigoPedido;
 
---------------------------------------------------------------------------------------------- Tabela itensPedido ---------------------------------------------------------------------------------------------------------
 
 CREATE TABLE itensPedido (
   id INT AUTO_INCREMENT PRIMARY KEY,
@@ -86,7 +81,6 @@ INSERT INTO 5sdb . itensPedido (codigoPedido, SKU, UPC, qtd, valor)
 SELECT codigoPedido, SKU, UPC, qtd, valor
 FROM 5sdb . tempdata;
 
---------------------------------------------------------------------------------------------- Tabela entregas ---------------------------------------------------------------------------------------------------------
 
 CREATE TABLE entregas (
   id INT AUTO_INCREMENT PRIMARY KEY,
@@ -94,15 +88,13 @@ CREATE TABLE entregas (
   valor DECIMAL(9,2) NOT NULL
 );
 
---------------------------------------------------------------------------------------------- Tabela compras ---------------------------------------------------------------------------------------------------------
 
 CREATE TABLE compras (
   id INT AUTO_INCREMENT PRIMARY KEY,
   SKU VARCHAR (50) NOT NULL,
-  qtd INT NOT NULL,
+  qtd INT NOT NULL
 );
 
---------------------------------------------------------------------------------------------- Tabela estoque ---------------------------------------------------------------------------------------------------------
 
 CREATE TABLE estoque (
   id INT AUTO_INCREMENT PRIMARY KEY,
@@ -114,7 +106,6 @@ INSERT INTO 5sdb . estoque (SKU, qtd)
 SELECT SKU, 10
 FROM 5sdb . produtos;
 
---------------------------------------------------------------------------------------------- Cursor ---------------------------------------------------------------------------------------------------------
 DELIMITER //
 CREATE PROCEDURE cursor_pedidos ()
 
