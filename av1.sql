@@ -20,7 +20,8 @@ CREATE TABLE tempdata (
 
 LOAD DATA INFILE 'C:/Users/sarah/Downloads/produtos.csv'
 INTO TABLE tempdata
-FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n';
+FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n'
+IGNORE 1 LINES;
 
 -------------------------------------------------------------------------------------------- Tabela clientes --------------------------------------------------------------------------------------------
 
