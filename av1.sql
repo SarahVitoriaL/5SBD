@@ -75,7 +75,7 @@ GROUP BY codigoPedido;
 
 CREATE TABLE itensPedido (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  codPedido VARCHAR(50) NOT NULL,
+  codigoPedido VARCHAR(50) NOT NULL,
   SKU VARCHAR(50) NOT NULL,
   UPC VARCHAR(50) NOT NULL,
   qtd INT NOT NULL,
@@ -94,10 +94,6 @@ CREATE TABLE entregas (
   valor DECIMAL(9,2) NOT NULL
 );
 
-INSERT INTO 5sdb . entregas (codigoPedido, valor)
-SELECT codigoPedido, valorPedido 
-FROM 5sdb . pedidos;
-
 --------------------------------------------------------------------------------------------- Tabela compras ---------------------------------------------------------------------------------------------------------
 
 CREATE TABLE compras (
@@ -114,9 +110,9 @@ CREATE TABLE estoque (
   qtd INT NOT NULL
 );
 
-LOAD DATA INFILE 'C:/Users/sarah/Downloads/estoque.csv'
-INTO TABLE estoque
-FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n';
+INSERT INTO 5sdb . estoque (SKU, qtd)
+SELECT SKU, 10
+FROM 5sdb . produtos;
 
 --------------------------------------------------------------------------------------------- Cursor ---------------------------------------------------------------------------------------------------------
 DELIMITER //
