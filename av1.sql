@@ -108,8 +108,8 @@ CREATE TABLE compras (
 --------------------------------------------------------------------------------------------- Tabela estoque ---------------------------------------------------------------------------------------------------------
 
 CREATE TABLE estoque (
-  idProduto INT NOT NULL,
-  codigoProduto VARCHAR(20) NOT NULL,
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  SKU VARCHAR (50) NOT NULL,
   qtd INT NOT NULL
 );
 
