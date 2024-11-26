@@ -1,0 +1,142 @@
+openapi: 3.0.0
+info:
+  title: 'API de Tripulantes'
+  description: 'Esta API permite gerenciar tripulantes e suas informações.'
+  contact:
+    email: suporte@companhiaaerea.com
+  license:
+    name: MIT
+    url: 'https://opensource.org/licenses/MIT'
+  version: 1.0.0
+paths:
+  /api/tripulantes:
+    get:
+      tags:
+        - Tripulantes
+      summary: 'Lista todos os tripulantes'
+      operationId: f93120a81c2b680305f0ffc25056b752
+      responses:
+        '200':
+          description: 'Retorna todos os tripulantes'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Tripulante'
+    post:
+      tags:
+        - Tripulantes
+      summary: 'Cria um novo tripulante'
+      operationId: 1749d7c7af6c20e181327e09f379fede
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Tripulante'
+      responses:
+        '201':
+          description: 'Tripulante criado com sucesso'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tripulante'
+  '/api/tripulantes/{id}':
+    get:
+      tags:
+        - Tripulantes
+      summary: 'Exibe um tripulante específico'
+      operationId: 5933a248d66879fa2ab599893cf05f02
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'ID do tripulante'
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 'Retorna o tripulante encontrado'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tripulante'
+        '404':
+          description: 'Tripulante não encontrado'
+    put:
+      tags:
+        - Tripulantes
+      summary: 'Atualiza um tripulante existente'
+      operationId: 2c50183842cd09b7a5800ba12f8938e6
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'ID do tripulante'
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Tripulante'
+      responses:
+        '200':
+          description: 'Tripulante atualizado com sucesso'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tripulante'
+    delete:
+      tags:
+        - Tripulantes
+      summary: 'Deleta um tripulante'
+      operationId: c77bf6a5a7821b6b37807264c970694a
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'ID do tripulante'
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 'Tripulante deletado com sucesso'
+components:
+  schemas:
+    Tripulante:
+      properties:
+        id:
+          type: integer
+        cargo:
+          type: string
+        nacionalidade:
+          type: string
+        data_nascimento:
+          type: string
+          format: date
+        sexo:
+          type: string
+        documento_identidade:
+          type: string
+        licenca:
+          type: string
+        validade_licenca:
+          type: string
+          format: date
+        status:
+          type: string
+        telefone_contato:
+          type: string
+        companhia_aerea:
+          type: string
+      type: object
+tags:
+  -
+    name: Tripulantes
+    description: 'Gerenciamento de tripulantes'
