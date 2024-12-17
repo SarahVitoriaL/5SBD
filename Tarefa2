@@ -1,4 +1,4 @@
-LOAD DATA INFILE 'C:/Users/Sarah/Downloads/pedidos.txt'
+LOAD DATA INFILE 'C:/Users/Sarah/Downloads/pedidos.csv'
 INTO TABLE tempdata
 FIELDS TERMINATED BY ';' ENCLOSED BY '"' LINES TERMINATED BY '\n'
 (codigoPedido, dataPedido, SKU, UPC, nomeProduto, qtd, valor, frete, email, codigoComprador, nomeComprador, endereco, CEP, UF, pais);
